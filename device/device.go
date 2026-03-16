@@ -96,7 +96,7 @@ type Device struct {
 	FakePacketsSize     []int
 	FakePacketsHeader   []byte
 	FakePacketsNoModify bool
-	stopCh              chan int //hiddify
+	stopCh              chan int //gtubox
 }
 
 // deviceState represents the state of a Device.
@@ -295,7 +295,7 @@ func (device *Device) SetPrivateKey(sk NoisePrivateKey) error {
 
 func NewDevice(tunDevice tun.Device, bind conn.Bind, logger *Logger, workers int) *Device {
 	device := new(Device)
-	device.stopCh = make(chan int, 1) //hiddify
+	device.stopCh = make(chan int, 1) //gtubox
 	device.state.state.Store(uint32(deviceStateDown))
 	device.closed = make(chan struct{})
 	device.log = logger
@@ -521,7 +521,7 @@ func (device *Device) BindUpdate() error {
 	if err != nil {
 		device.log.Errorf("Hiddify! Error in opening new bind %v", err)
 		netc.port = 0
-		recvFns, netc.port, err = netc.bind.Open(netc.port) //hiddify: retry
+		recvFns, netc.port, err = netc.bind.Open(netc.port) //gtubox: retry
 		if err != nil {
 			netc.port = 0
 			return fmt.Errorf("Hiddify! Error in opening new bind %v", err)
